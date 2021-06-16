@@ -27,9 +27,13 @@ resource "google_compute_instance_template" "k3s-server" {
   can_ip_forward = true
 
   metadata = {
-    block-project-ssh-keys = "FALSE"
-    enable-oslogin         = "FALSE"
-    ssh-keys               = "aledbf_gmail_com:${file("/home/aledbf/.ssh/id_rsa.pub")}"
+    block-project-ssh-keys     = "FALSE"
+    enable-oslogin             = "FALSE"
+    enable-guest-attributes    = "TRUE"
+    google-compute-enable-pcid = "TRUE"
+    disable-legacy-endpoints   = "TRUE"
+    ssh-keys                   = "aledbf_gmail_com:${file("/home/aledbf/.ssh/id_rsa.pub")}"
+    cluster-name               = "kubernetes"
   }
 
   disk {
@@ -91,6 +95,4 @@ resource "google_compute_region_instance_group_manager" "k3s-servers" {
     name = "k3s"
     port = 6443
   }
-
-  depends_on = [google_compute_router_nat.nat]
 }

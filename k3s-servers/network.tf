@@ -31,21 +31,3 @@ resource "google_compute_firewall" "k3s-api-authorized-networks" {
   target_tags = ["k3s-server"]
   direction   = "INGRESS"
 }
-
-resource "google_compute_router" "router" {
-  name    = "k3s-servers"
-  region  = var.region
-  network = var.network
-}
-
-resource "google_compute_router_nat" "nat" {
-  name                               = "k3s-servers"
-  router                             = google_compute_router.router.name
-  region                             = var.region
-  nat_ip_allocate_option             = "AUTO_ONLY"
-  source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
-  subnetwork {
-    name                    = google_compute_subnetwork.k3s-servers.id
-    source_ip_ranges_to_nat = ["ALL_IP_RANGES"]
-  }
-}
