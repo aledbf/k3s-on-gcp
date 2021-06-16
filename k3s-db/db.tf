@@ -8,6 +8,8 @@ resource "google_sql_database_instance" "k3s-db" {
   region           = var.region
   database_version = "POSTGRES_13"
 
+  deletion_protection = false
+
   settings {
     tier              = var.db_tier
     availability_type = "REGIONAL"

@@ -14,6 +14,8 @@ resource "google_compute_instance_template" "k3s-agent" {
 
   metadata_startup_script = data.template_file.k3s-agent-startup-script.rendered
 
+  can_ip_forward = true
+
   metadata = {
     block-project-ssh-keys = "FALSE"
     enable-oslogin         = "FALSE"
@@ -21,7 +23,7 @@ resource "google_compute_instance_template" "k3s-agent" {
   }
 
   disk {
-    source_image = "gitpod-k3s-20210531-01"
+    source_image = "gitpod-k3s-20210607-01"
     auto_delete  = true
     boot         = true
     disk_size_gb = 50
@@ -40,8 +42,18 @@ resource "google_compute_instance_template" "k3s-agent" {
 
   service_account {
     scopes = [
+      # Compute Engine (rw)
       "https://www.googleapis.com/auth/compute",
-      "https://www.googleapis.com/auth/cloud-platform",
+      # Storage (ro)
+      "https://www.googleapis.com/auth/devstorage.read_only",
+      # Service Control (enabled)
+      "https://www.googleapis.com/auth/servicecontrol",
+      # Service Management (rw)
+      "https://www.googleapis.com/auth/service.management",
+      # Stackdriver Logging (wo)
+      "https://www.googleapis.com/auth/logging.write",
+      # Stackdriver Monitoring (full)
+      "https://www.googleapis.com/auth/monitoring",
     ]
   }
 

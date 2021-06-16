@@ -13,6 +13,7 @@ export K3S_TOKEN="${token}"
 
 # shellcheck disable=SC2154
 /usr/local/bin/install-k3s.sh \
+    --kubelet-arg=cloud-provider=external \
     --container-runtime-endpoint=/var/run/containerd/containerd.sock
 
 mkdir -p /run/containerd/io.containerd.runtime.v1.linux/k8s.io

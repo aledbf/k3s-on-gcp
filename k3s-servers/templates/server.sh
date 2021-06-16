@@ -17,6 +17,10 @@ export INSTALL_K3S_SKIP_DOWNLOAD=true
     --disable=servicelb,traefik \
     --disable-kube-proxy \
     --flannel-backend=none \
+    --cluster-cidr=192.168.0.0/16 \
+    --disable-network-policy \
+    --kubelet-arg=cloud-provider=external --kube-apiserver-arg=cloud-provider=external --kube-controller-arg=cloud-provider=external \
+    --disable-cloud-controller \
     --datastore-endpoint "postgres://${db_user}:${db_password}@${db_host}:5432/${db_name}"
 
 # create directory for hostpath
